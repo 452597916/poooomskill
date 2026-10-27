@@ -1,0 +1,49 @@
+{
+  "name": "poooomskill",
+  "version": "1.2.1",
+  "private": true,
+  "type": "module",
+  "description": "PoooomSkill —— 本地 AI 技能管理台：中文备注、分组、暗号调用、真实调用统计",
+  "author": "万智云集 <contact@poooom.com> (https://poooom.com)",
+  "license": "MIT",
+  "homepage": "https://poooom.com",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "bin": {
+    "poooomskill": "server/cli.mjs",
+    "poooomskill-mcp": "server/mcp.mjs"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server/index.mjs",
+    "cli": "node server/cli.mjs",
+    "mcp": "node server/mcp.mjs",
+    "typecheck": "tsc --noEmit",
+    "check": "node build/check.mjs",
+    "icon": "node build/make-icon.mjs",
+    "dist:runtime": "node build/prepare-runtime.mjs",
+    "dist:installer": "powershell -NoProfile -ExecutionPolicy Bypass -File build/build-installer.ps1"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "pinyin-pro": "^3.26.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "rcedit": "^4.0.1",
+    "sharp": "^0.34.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.7.0",
+    "vite": "^6.0.0"
+  }
+}

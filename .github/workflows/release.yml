@@ -1,0 +1,76 @@
+# GitHub Actions · 发布
+#
+# 推送形如 v1.0.0 的 tag 时自动：
+#   1. 用 tag 号同步 package.json 与安装包里的版本号
+#   2. 完整打包出 Windows 安装包（含 SHA-256 校验单）
+#   3. 创建 GitHub Release 并挂上安装包、校验单与自动生成的更新说明
+#
+# 用法：git tag v1.0.0 && git push origin v1.0.0
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 用 tag 号同步版本号（package.json 与安装包脚本）
+        shell: node {0}
+        run: |
+          const fs = require('fs');
+          const version = process.env.GITHUB_REF_NAME.replace(/^v/, '');
+          if (!/^\d+\.\d+\.\d+/.test(version)) throw new Error('tag 不是 vX.Y.Z 形式：' + version);
+
+          const pkgPath = 'package.json';
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+          pkg.version = version;
+          fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+
+          const issPath = 'build/installer.iss';
+          const iss = fs.readFileSync(issPath, 'utf8')
+            .replace(/#define AppVersion\s+".*?"/, '#define AppVersion     "' + version + '"');
+          fs.writeFileSync(issPath, iss);
+
+          console.log('版本号已同步为 ' + version);
+
+      - name: 安装 Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: 打包 Windows 安装包
+        run: npm run dist:installer
+
+      - name: 发布到 GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/PoooomSkill-Setup-*.exe
+            release/PoooomSkill-Setup-*.exe.sha256.txt
+          generate_release_notes: true
+          body: |
+            PoooomSkill ${{ github.ref_name }} —— 本地 AI 技能管理台（万智云集）
+
+            安装包为按用户安装，不需要管理员权限；未做数字签名，SmartScreen 可能提示
+            「未知发布者」，用随附的 `.sha256.txt` 核对文件即可确认未被篡改。
+
+            覆盖 Claude Code / Trae CN / Codex；全离线运行，只监听 127.0.0.1。
+            项目主页：https://poooom.com

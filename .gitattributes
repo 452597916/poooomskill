@@ -1,0 +1,20 @@
+# 统一行尾，避免跨平台协作时产生无意义的整文件 diff
+* text=auto eol=lf
+
+# Windows 侧脚本与源码保持 CRLF
+# （build/build-installer.ps1 另需保留 UTF-8 BOM，PowerShell 5 才能正确解析中文）
+*.ps1 text eol=crlf
+*.cs text eol=crlf
+*.iss text eol=crlf
+*.isl text eol=crlf
+*.bat text eol=crlf
+
+# 二进制文件不做任何转换
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.exe binary
+*.dll binary
+*.woff2 binary

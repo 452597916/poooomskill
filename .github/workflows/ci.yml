@@ -1,0 +1,82 @@
+# GitHub Actions · 持续集成
+#
+# 每次推送到 main/master 或发起 Pull Request 时：
+#   1. 类型检查 + 前端构建 + 全局自检（含真实启动服务后的接口实测）
+#   2. 完整打包演练：编译 C# 启动器 → 暂存 → 出 Windows 安装包
+#   3. 安装包作为构建产物（Artifact）保存，方便手动下载试用
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 类型检查
+        run: npm run typecheck
+
+      - name: 构建前端界面
+        run: npm run build
+
+      - name: 放一个示例技能（自检要求本机至少有一个技能）
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:USERPROFILE ".claude\skills\ci-fixture"
+          New-Item -ItemType Directory -Force -Path $dir | Out-Null
+          $content = "---`nname: ci-fixture`ndescription: CI 自检用的示例技能`n---`n`n# CI Fixture`n"
+          Set-Content -Path (Join-Path $dir "SKILL.md") -Value $content -Encoding UTF8
+
+      - name: 启动服务并跑完整自检（含 HTTP 接口实测）
+        shell: pwsh
+        run: |
+          $proc = Start-Process node -ArgumentList 'server/index.mjs' -PassThru -WindowStyle Hidden
+          try {
+            $ready = $false
+            for ($i = 0; $i -lt 40; $i++) {
+              try {
+                $r = Invoke-WebRequest 'http://127.0.0.1:5273/api/state' -UseBasicParsing -TimeoutSec 2
+                if ($r.StatusCode -eq 200) { $ready = $true; break }
+              } catch { }
+              Start-Sleep -Milliseconds 500
+            }
+            if (-not $ready) { throw '服务启动超时' }
+            npm run check -- --api
+            if ($LASTEXITCODE -ne 0) { throw '自检未通过' }
+          } finally {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+          }
+
+      - name: 安装 Inno Setup
+        run: choco install innosetup --no-progress -y
+
+      - name: 打包 Windows 安装包
+        run: npm run dist:installer
+
+      - name: 上传安装包
+        uses: actions/upload-artifact@v4
+        with:
+          name: PoooomSkill-Setup
+          path: |
+            release/PoooomSkill-Setup-*.exe
+            release/*.sha256.txt
+          retention-days: 14

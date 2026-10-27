@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <meta name="description" content="PoooomSkill —— 本地 AI 技能管理台：中文备注、分组、暗号调用、真实调用统计。万智云集出品。" />
+    <meta name="author" content="万智云集" />
+    <title>PoooomSkill · 本地 AI 技能管理台</title>
+    <script>
+      /* 首屏前定主题，避免暗色模式下白屏闪一下 */
+      (function () {
+        try {
+          var m = localStorage.getItem('poooomskill.theme') || 'system';
+          var dark = m === 'dark' || (m === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch (e) { /* 隐私模式下 localStorage 可能不可用 */ }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

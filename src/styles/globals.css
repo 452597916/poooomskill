@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #8b5cf6;
+  --color-brand-weak: #f0ebff;
+  --color-ink: #1c1b19;
+  --color-muted: #6f6a63;
+  --color-line: #e4e0da;
+  --color-surface: #f7f5f2;
+  --color-page: #fbfaf8;
+  --color-card: #ffffff;
+  --color-warn: #b8541a;
+
+  --font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+}
+
+/** 暗色模式：只翻转语义色变量，组件内的 class 不用改（bg-card / text-ink / border-line 自动跟随） */
+html[data-theme="dark"] {
+  --color-brand: #a78bfa;
+  --color-brand-weak: #2b2145;
+  --color-ink: #ece9f3;
+  --color-muted: #a29bad;
+  --color-line: #322f3d;
+  --color-surface: #1b1a21;
+  --color-page: #131217;
+  --color-card: #1e1d26;
+  --color-warn: #f0a06a;
+  color-scheme: dark;
+}
+
+/** 项目常用 utility 类，收敛重复样式 —— 按用户规则：>=3 处相同 class 必须全局统一 */
+@utility text-caption { font-size: 11px; line-height: 16px; color: var(--color-muted); }
+@utility text-note { font-size: 12px; line-height: 18px; color: var(--color-muted); }
+@utility card { border: 1px solid var(--color-line); background: var(--color-surface); border-radius: 8px; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .18s ease, color .18s ease;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--color-line); border-radius: 6px; }
+::-webkit-scrollbar-track { background: transparent; }

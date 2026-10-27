@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PoooomSkill · 小尺寸品牌标记（16/24/32px）：粗线条简化旋窝，保留 logo 形态特征 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="万智云集 POOOOM">
+  <defs>
+    <linearGradient id="poooomSmall" x1="2.75" y1="1.75" x2="88.01" y2="88.9" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2c2cdd"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <!-- 紫色圆角方形底 -->
+  <rect width="96" height="96" rx="22" fill="url(#poooomSmall)"/>
+  <!-- 简化旋窝：三条粗弧线呈 120° 旋转排列，各扫 95°，形成旋转动感 -->
+  <g fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round">
+    <path d="M48 26a22 22 0 0 1 21.9 23.8"/>
+    <path d="M48 26a22 22 0 0 1 21.9 23.8" transform="rotate(120 48 48)"/>
+    <path d="M48 26a22 22 0 0 1 21.9 23.8" transform="rotate(240 48 48)"/>
+  </g>
+  <!-- 中心白点 -->
+  <circle cx="48" cy="48" r="8" fill="#ffffff"/>
+</svg>

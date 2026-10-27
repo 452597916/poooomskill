@@ -1,0 +1,23 @@
+# 依赖与构建产物
+node_modules/
+dist/
+
+# 打包产物：安装包放 GitHub Releases，不随仓库分发
+release/
+build/staging/
+
+# 图标与向导图的生成产物（可由 brand/icon-source.png 重新生成）
+build/icon.ico
+build/wizard-*.bmp
+build/mark-*-512.png
+build/icon-preview/
+
+# 日志与系统杂物
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# 本地环境变量
+.env
+.env.*
