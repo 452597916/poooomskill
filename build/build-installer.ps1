@@ -60,7 +60,9 @@ if (-not $setup) { Die '未找到生成的安装包' }
 # ---------- 6. 校验单 ----------
 Step 6 '生成 SHA-256 校验单'
 $version = node -p "require('./package.json').version"
-$hash = (Get-FileHash $setup.FullName -Algorithm SHA256).Hash
+# certutil 比 Get-FileHash 兼容性更好（CI 环境里 PowerShell 版本不一）
+$certLine = (certutil -hashfile $setup.FullName SHA256 | Select-Object -Index 1)
+$hash = ($certLine -replace '\s', '').ToUpper()
 $size = [math]::Round($setup.Length / 1MB, 2)
 $sumFile = "$($setup.FullName).sha256.txt"
 @"
