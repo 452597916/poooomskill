@@ -66,6 +66,11 @@ jobs:
             Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
           }
 
+      - name: 生成图标与向导图片
+        run: |
+          npm run icon
+          node build/make-wizard-images.mjs
+
       - name: 安装 Inno Setup
         run: choco install innosetup --no-progress -y
 
