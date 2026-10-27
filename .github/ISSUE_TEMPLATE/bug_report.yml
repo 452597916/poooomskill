@@ -1,0 +1,65 @@
+name: Bug 报告
+description: 汇报一个不正常工作的功能
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 版本号
+      description: 界面右上角能看到，如 v1.2.1
+      placeholder: v1.2.1
+    validations:
+      required: true
+
+  - type: dropdown
+    id: client
+    attributes:
+      label: 出问题的客户端
+      multiple: true
+      options:
+        - Claude Code
+        - Trae CN
+        - Codex
+        - Cursor
+        - Windsurf
+        - Gemini CLI
+        - Qwen Code
+        - 安装/卸载过程
+        - 界面本身
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: 怎么出现的
+      description: 操作步骤越细越好，最好能让别人照着重现
+      placeholder: |
+        1. 打开技能库
+        2. 点了……
+        3. 就出现……
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望的行为
+      placeholder: 本来应该……
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 相关日志（可选）
+      description: "%APPDATA%\\PoooomSkill\\poooomskill.log 里挑相关的几行贴过来"
+      render: text
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截图（可选）
+      description: 直接拖拽图片进来

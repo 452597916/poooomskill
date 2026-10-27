@@ -1,0 +1,10 @@
+# 空白 Issue 开关
+blank_issues_enabled: true
+# 引导网友去 Discussions 聊天，Issue 只留 bug 与需求
+contact_links:
+  - name: 用法讨论 / 求助
+    url: https://github.com/452597916/poooomskill/discussions
+    about: 聊用法、晒配置、求助，去 Discussions 更合适
+  - name: 官网
+    url: https://poooom.com
+    about: 产品介绍与官方文档
